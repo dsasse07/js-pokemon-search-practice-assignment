@@ -4,6 +4,13 @@ console.log(POKEMON)
 const input = document.querySelector("#pokemon-search-input")
 const container = document.querySelector("#pokemon-container")
 const noPokemon = container.querySelector("center")
+const filters = document.querySelector(".search-filters")
+let searchOption = "name"
+let sortOption = "name"
+
+const overlay = document.createElement("div")
+overlay.id = "stats-overlay"
+overlay.classList.add("hidden")
 
 //*********** RENDER POKEMON **********/
 const createPokemon = attributes => {
@@ -59,18 +66,34 @@ const renderAllPokemon = (array = POKEMON) => {
 
 const sortPokemon = (array, criteria = "name") => {
   switch(true){
-    case (criteria === "name"): 
+    case (sortOption === "name"): 
       return array.sort((a, b) => {
         return a.name.localeCompare(b.name)
-      })  
+      })
+    case (sortOption === "id"):
+      return array.sort((a, b) => {
+        return a.id - b.id
+      })
   }
 }
 
   
 
-const searchPokemon = e => {
-  let searchQuery = new RegExp(`${e.target.value}`, 'i')
-  renderAllPokemon(POKEMON.filter(pokemon => pokemon.name.match(searchQuery)))
+const searchPokemon = _ => {
+  let searchQuery = new RegExp(`${input.value}`, 'i')
+  switch(true){
+    case (searchOption === "name"):
+      renderAllPokemon(POKEMON.filter(pokemon => pokemon.name.match(searchQuery)))
+      break
+    case (searchOption === "types"):
+      // debugger
+      renderAllPokemon(POKEMON.filter(pokemon => pokemon.types.some(e => searchQuery.test(e))))
+      break
+    case (searchOption === "abilities"):
+      renderAllPokemon(POKEMON.filter(pokemon => pokemon.abilities.some(e => searchQuery.test(e))))
+      break
+  }
+  
 }
 
 //************ FLIP SPRITE *************/
@@ -196,22 +219,19 @@ const displayStats = id => {
   closeButton.textContent = "X  Close"
   statsFrame.append(closeButton)
 
-  let overlay = document.createElement("div")
-  overlay.id = "stats-overlay"
+
   overlay.append(statsFrame)
   document.body.prepend(overlay)
 
 }
 
 const closeOverlay = _ => {
-  console.log("hi")
-  const overlay = document.querySelector("#stats-overlay")
+  Array.from(overlay.children).forEach(child => child.remove())
   overlay.remove()
 }
 
 //************ LISTENERS *******************/
-const handleContainerClick = e => {
-    console.log(e.target)
+const handleClick = e => {
     switch(true) {
         case (e.target.className === "toggle-sprite"):
           toggleSprite(e.target)
@@ -221,12 +241,22 @@ const handleContainerClick = e => {
           break
         case (e.target.id === "stats-overlay" || e.target.className === "button-close" ):
           closeOverlay()
+          break
+        case (e.target.name === "search-options"):
+          searchOption = e.target.value
+          searchPokemon()
+          break
+        case (e.target.name === "sort-options"):
+          sortOption = e.target.value
+          searchPokemon()
       }
     }
     
+
     
-    
-document.body.addEventListener('click', handleContainerClick)
+container.addEventListener('click', handleClick)
 input.addEventListener('input', searchPokemon)
+overlay.addEventListener('click', handleClick)
+filters.addEventListener('click', handleClick)
 
 renderAllPokemon()

@@ -12,6 +12,27 @@
       <img id="pokemon-logo" src="images/pokemon.png" alt="">
       <form id="pokemon-search-form" class="" action="" method="">
         <input id="pokemon-search-input" type="text" name="">
+        <div class="search-filters">
+          <div class="search-options">
+            <input id="search-name" type="radio" name="search-options" value="name" checked="checked">
+            <label for="search-name">Search By Name</label>
+            <br>
+            <input id="search-types" type="radio" name="search-options" value="types">
+            <label for="search-types">Search By Types</label>
+            <br>
+            <input id="search-abilities" type="radio" name="search-options" value="abilities">
+            <label for="search-abilities">Search By Ability</label>
+            <br>
+          </div>
+          <div class="sort-options">
+            <input id="sort-name" type="radio" name="sort-options" value="name" checked="checked">
+            <label for="sort-name">Sort by Name</label>
+            <br>
+            <input id="sort-id" type="radio" name="sort-options" value="id">
+            <label for="sort-id">Sort by PokeDex ID</label>
+            <br>
+          </div>
+        </div>
       </form>
 
       <div id="pokemon-container">
