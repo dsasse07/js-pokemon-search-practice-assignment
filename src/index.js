@@ -1,3 +1,16 @@
+// DEFINED USING FETCH
+let POKEMON;
+
+fetch('http://localhost:3000/pokemon')
+  .then( response => response.json())
+  .then( d => {
+    POKEMON = d
+    renderAllPokemon()
+  })
+
+
+
+
 console.log(POKEMON)
 
 //*********** GET ELEMENTS ***********/
@@ -259,4 +272,3 @@ input.addEventListener('input', searchPokemon)
 overlay.addEventListener('click', handleClick)
 filters.addEventListener('click', handleClick)
 
-renderAllPokemon()
